@@ -1,30 +1,58 @@
 package com.example.HQTCSDL.serviceImpl;
 
+import com.example.HQTCSDL.Dto.AuthResponseDTO;
 import com.example.HQTCSDL.Dto.LoginDto;
 import com.example.HQTCSDL.Dto.UserDto;
 import com.example.HQTCSDL.Entity.UserEntity;
+import com.example.HQTCSDL.Security.JwtAuthEntryPoint;
+import com.example.HQTCSDL.Security.JwtGenerator;
 import com.example.HQTCSDL.repository.UserRepository;
 import com.example.HQTCSDL.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtGenerator jwtGenerator;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository,
+                           PasswordEncoder passwordEncoder,
+                           AuthenticationManager authenticationManager,
+                           JwtGenerator jwtGenerator) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
+        this.jwtGenerator = jwtGenerator;
     }
 
     @Override
     public ResponseEntity<?> login(LoginDto loginDto) {
-        return null;
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginDto.getUsername(),
+                        loginDto.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String token = jwtGenerator.generateToken(authentication);
+        List<String> roles = authentication.getAuthorities()
+                .stream()
+                .map(role -> role.getAuthority())
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(new AuthResponseDTO(token, roles), HttpStatus.OK);
     }
 
     @Override
@@ -117,7 +145,7 @@ public class UserServiceImpl implements UserService {
     public UserEntity getUserFromDto(UserDto userDto) {
         UserEntity userEntity = new UserEntity();
         userEntity.setEmail(userDto.getEmail());
-        userEntity.setPassword(userDto.getPassword());
+        userEntity.setPassword(passwordEncoder.encode(userDto.getPassword()));
         userEntity.setUsername(userDto.getUsername());
         userEntity.setDateOfBirth(userDto.getDateOfBirth());
         userEntity.setFullName(userDto.getFullName());

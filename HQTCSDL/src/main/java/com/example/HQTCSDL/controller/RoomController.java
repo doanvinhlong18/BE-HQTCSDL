@@ -16,7 +16,7 @@ public interface RoomController {
     ResponseEntity<?> deleteAllResidentsFromRoom(@PathVariable int idRoom);
     @PutMapping("/break/{idResident}")
     ResponseEntity<?> deleteResidentFromRoom(@PathVariable int idResident);
-    @PutMapping("add/resident/{idRoom}")
+    @PutMapping("/add/resident/{idRoom}")
     ResponseEntity<?> addResidentToRoom(@PathVariable int idRoom, @RequestBody RentalTimeDto rentalTimeDto);
     @GetMapping("/{idRoom}")
     ResponseEntity<?> getRoomById(@PathVariable int idRoom);
