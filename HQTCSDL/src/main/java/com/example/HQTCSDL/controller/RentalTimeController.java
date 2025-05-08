@@ -11,7 +11,7 @@ public interface RentalTimeController {
     @DeleteMapping("/remove/{idRentalTime}")
     ResponseEntity<?> removeRentalTime(@PathVariable int idRentalTime);
     @PutMapping("/update/{idRentalTime}")
-    ResponseEntity<?> updateRentalTime(@PathVariable int idRentalTime, RentalTimeDto rentalTimeDto);
+    ResponseEntity<?> updateRentalTime(@PathVariable int idRentalTime, @RequestBody RentalTimeDto rentalTimeDto);
     @GetMapping("/{idRentalTime}")
     ResponseEntity<?> getRentalTime(@PathVariable int idRentalTime);
     @GetMapping("/all")
