@@ -56,6 +56,8 @@ public class RoomServiceImpl implements RoomService {
         RoomEntity room = roomEntityOptional.get();
         room.setRentalTimes(null);
         room.setBills(null);
+        room.setRentStatus("available");
+        roomRepository.save(room);
         return new ResponseEntity<>(Collections.singletonMap("message", "Xoa phong thanh cong"), HttpStatus.OK);
     }
 
@@ -67,6 +69,7 @@ public class RoomServiceImpl implements RoomService {
         }
         ResidentEntity resident = residentEntity.get();
         resident.getRentalTimes().getLast().setRoom(null);
+        residentRepository.save(resident);
         return new ResponseEntity<>(Collections.singletonMap("message", "Xoa cu dan khoi phong thanh cong"), HttpStatus.OK);
     }
 
@@ -92,6 +95,8 @@ public class RoomServiceImpl implements RoomService {
         rentalTimeEntity.setRoom(room);
         rentalTimeEntity.setResident(residentEntity);
         System.out.println(rentalTimeEntity);
+        room.setRentStatus("rented");
+        roomRepository.save(room);
         rentalTimeRepository.save(rentalTimeEntity);
         return new ResponseEntity<>(Collections.singletonMap("message", "Thêm thành công"), HttpStatus.OK);
     }
