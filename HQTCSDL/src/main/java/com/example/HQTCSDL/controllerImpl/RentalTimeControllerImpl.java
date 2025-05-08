@@ -26,8 +26,8 @@ public class RentalTimeControllerImpl implements RentalTimeController {
     }
 
     @Override
-    public ResponseEntity<?> updateRentalTime(int idRoom) {
-        return null;
+    public ResponseEntity<?> updateRentalTime(int idRentalTime, RentalTimeDto rentalTimeDto) {
+        return rentalTimeService.updateRentalTime(idRentalTime, rentalTimeDto);
     }
 
     @Override

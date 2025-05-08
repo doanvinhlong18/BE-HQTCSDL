@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 public interface RentalTimeService{
     ResponseEntity<?> addRentalTime(int idRoom, RentalTimeDto rentalTimeDto);
     ResponseEntity<?> removeRentalTime(int idRentalTime);
-    ResponseEntity<?> updateRentalTime(int idRoom);
+    ResponseEntity<?> updateRentalTime(int idRentalTime, RentalTimeDto rentalTimeDto);
     ResponseEntity<?> getRentalTime(int idRentalTime);
     ResponseEntity<?> getAllRentalTimes();
 }
