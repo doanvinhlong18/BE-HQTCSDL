@@ -24,6 +24,6 @@ public interface UserController {
     @GetMapping("/{idUser}")
     ResponseEntity<?> getUserById(@PathVariable int idUser);
 
-    @PostMapping("/user/login")
+    @PostMapping("/login")
     ResponseEntity<?> loginUser(@RequestBody LoginDto loginDto);
 }
