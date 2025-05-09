@@ -1,6 +1,7 @@
 package com.example.HQTCSDL.controller;
 
 
+import com.example.HQTCSDL.Dto.LoginDto;
 import com.example.HQTCSDL.Dto.UserDto;
 import org.apache.catalina.User;
 import org.springframework.http.ResponseEntity;
@@ -23,4 +24,6 @@ public interface UserController {
     @GetMapping("/{idUser}")
     ResponseEntity<?> getUserById(@PathVariable int idUser);
 
+    @PostMapping("/user/login")
+    ResponseEntity<?> loginUser(@RequestBody LoginDto loginDto);
 }

@@ -1,5 +1,6 @@
 package com.example.HQTCSDL.controllerImpl;
 
+import com.example.HQTCSDL.Dto.LoginDto;
 import com.example.HQTCSDL.Dto.UserDto;
 import com.example.HQTCSDL.controller.UserController;
 import com.example.HQTCSDL.service.UserService;
@@ -38,5 +39,10 @@ public class UserControllerImpl implements UserController {
     @Override
     public ResponseEntity<?> getUserById(int idUser) {
         return userService.getUserById(idUser);
+    }
+
+    @Override
+    public ResponseEntity<?> loginUser(LoginDto loginDto) {
+        return userService.login(loginDto);
     }
 }

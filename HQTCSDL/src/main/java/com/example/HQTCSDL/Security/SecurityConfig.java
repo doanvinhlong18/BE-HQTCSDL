@@ -28,19 +28,36 @@ public class SecurityConfig {
     }
 
 
+    private final String[] apiAdmin = {
+            "/bill/**",
+            "/service/**",
+            "/usedservice/**",
+            "/room/**",
+            "/rentaltime/**",
+            "/resident/**",
+            "/building/**",
+            "/user/**"
+    };
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
 //                        .requestMatchers("/user/signup", "/user/login").permitAll()
-//                        .requestMatchers("/bill/**").hasAuthority("ADMIN_FINANCE")
-//                        .requestMatchers("/room/**").hasAuthority("ADMIN_ROOM")
-//                        .requestMatchers("/building/**").hasAuthority("ADMIN_BUILDING")
-//                        .requestMatchers("/service/**", "/usedservice/**").hasAuthority("ADMIN_SERVICE")
-//                        .requestMatchers("/rentaltime/**").hasAuthority("ADMIN_RENTALTIME")
-//                        .requestMatchers("/resident/**").hasAuthority("ADMIN_RESIDENT")
+//                        .requestMatchers(
+//                        "/bill/**",
+//                        "/service/**",
+//                        "/usedservice/**"
+//                        ).hasAuthority("ADMIN_FINANCE")
+//                        .requestMatchers(
+//                        "/room/**",
+//                        "/rentaltime/**",
+//                        "/resident/**"
+//                        ).hasAuthority("ADMIN_BUILDING")
+//                        .requestMatchers(
+//                        apiAdmin).hasAuthority("ADMIN")
                                 .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated()
                 )

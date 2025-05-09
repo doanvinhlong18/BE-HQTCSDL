@@ -43,7 +43,6 @@ public class UsedServiceServiceImpl implements UsedServiceService {
         UsedServiceEntity usedServiceEntity = new UsedServiceEntity();
         usedServiceEntity.setEndDateTime(usedServiceDto.getEndDateTime());
         usedServiceEntity.setStartDateTime(usedServiceDto.getStartDateTime());
-        usedServiceEntity.setStatus(usedServiceDto.getStatus());
         usedServiceEntity.setQuantity(usedServiceDto.getQuantity());
         usedServiceEntity.setResident(resident);
         usedServiceEntity.setService(service);
