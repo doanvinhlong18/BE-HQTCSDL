@@ -45,4 +45,9 @@ public class UserControllerImpl implements UserController {
     public ResponseEntity<?> loginUser(LoginDto loginDto) {
         return userService.login(loginDto);
     }
+
+    @Override
+    public ResponseEntity<?> getUserByUsername(String username) {
+        return userService.getUserByUsername(username);
+    }
 }

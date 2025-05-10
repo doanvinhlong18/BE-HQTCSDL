@@ -2,6 +2,7 @@ package com.example.HQTCSDL.serviceImpl;
 
 import com.example.HQTCSDL.Dto.AuthResponseDTO;
 import com.example.HQTCSDL.Dto.LoginDto;
+import com.example.HQTCSDL.Dto.ResponseDto.UserResponseDto;
 import com.example.HQTCSDL.Dto.UserDto;
 import com.example.HQTCSDL.Entity.UserEntity;
 import com.example.HQTCSDL.Security.JwtAuthEntryPoint;
@@ -130,6 +131,25 @@ public class UserServiceImpl implements UserService {
         }
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<?> getUserByUsername(String username) {
+        Optional<UserEntity> userEntity = userRepository.findByUsername(username);
+        if (userEntity.isEmpty()){
+            return new ResponseEntity<>(Collections.singletonMap("message", "Khong tim thay tai khoan nguoi dung"), HttpStatus.NOT_FOUND);
+        }
+        UserEntity user = userEntity.get();
+        UserResponseDto userResponseDto = new UserResponseDto();
+        userResponseDto.setId(user.getId());
+        userResponseDto.setUsername(user.getUsername());
+        userResponseDto.setEmail(user.getEmail());
+        userResponseDto.setDateOfBirth(user.getDateOfBirth());
+        userResponseDto.setFullName(user.getFullName());
+        userResponseDto.setPhone(user.getPhone());
+        userResponseDto.setPosition(user.getPosition());
+        return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
+    }
+
     public boolean validateSignup(UserDto userDto) {
         if(!userDto.getEmail().isBlank()
                 && !userDto.getPassword().isBlank()

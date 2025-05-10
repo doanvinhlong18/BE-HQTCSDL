@@ -45,20 +45,21 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/user/signup", "/user/login").permitAll()
-//                        .requestMatchers(
-//                        "/bill/**",
-//                        "/service/**",
-//                        "/usedservice/**"
-//                        ).hasAuthority("ADMIN_FINANCE")
-//                        .requestMatchers(
-//                        "/room/**",
-//                        "/rentaltime/**",
-//                        "/resident/**"
-//                        ).hasAuthority("ADMIN_BUILDING")
-//                        .requestMatchers(
-//                        apiAdmin).hasAuthority("ADMIN")
-                                .requestMatchers("/**").permitAll()
+                        .requestMatchers("/user/signup", "/user/login").permitAll()
+                        .requestMatchers(
+                        "/bill/**",
+                        "/service/**",
+                        "/usedservice/**"
+                        ).hasAuthority("ADMIN_FINANCE")
+                        .requestMatchers(
+                        "/room/**",
+                        "/rentaltime/**",
+                        "/resident/**"
+                        ).hasAuthority("ADMIN_BUILDING")
+                        .requestMatchers(
+                        apiAdmin
+                        ).hasAuthority("ADMIN")
+//                                .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

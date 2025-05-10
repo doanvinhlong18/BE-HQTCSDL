@@ -26,4 +26,7 @@ public interface UserController {
 
     @PostMapping("/login")
     ResponseEntity<?> loginUser(@RequestBody LoginDto loginDto);
+
+    @GetMapping("/get")
+    ResponseEntity<?> getUserByUsername(@RequestParam("username") String username);
 }

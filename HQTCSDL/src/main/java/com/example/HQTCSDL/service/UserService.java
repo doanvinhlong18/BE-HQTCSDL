@@ -18,4 +18,5 @@ public interface UserService {
     ResponseEntity<?> getUserById(int id);
 
     ResponseEntity<?> getAllUsers();
+    ResponseEntity<?> getUserByUsername(String username);
 }
