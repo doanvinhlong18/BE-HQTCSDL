@@ -32,7 +32,7 @@ public class RoomEntity {
     @OneToMany(mappedBy = "room")
     List<BillEntity> bills;
 
-    @OneToMany(mappedBy = "room")
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     @JsonManagedReference
     List<RentalTimeEntity> rentalTimes;
 

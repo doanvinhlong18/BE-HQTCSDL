@@ -54,8 +54,25 @@ public class RoomServiceImpl implements RoomService {
             return new ResponseEntity<>(Collections.singletonMap("message", "Khong tim thay phong"), HttpStatus.NOT_FOUND);
         }
         RoomEntity room = roomEntityOptional.get();
-        room.setRentalTimes(null);
-        room.setBills(null);
+        // Xoá tất cả rentalTimes (nếu có)
+        if (room.getRentalTimes() != null) {
+            for (RentalTimeEntity rentalTime : room.getRentalTimes()) {
+                rentalTime.setRoom(null); // huỷ liên kết với room
+                // Nếu bạn có rentalTimeRepository, bạn có thể lưu lại rentalTime tại đây
+                // rentalTimeRepository.save(rentalTime);
+            }
+            room.getRentalTimes().clear(); // xóa khỏi danh sách trong Room (không ảnh hưởng DB nếu không có orphanRemoval)
+        }
+
+        // Các thao tác khác (nếu cần)
+        room.setRentStatus("available");
+
+        // Xoá tất cả bills (nếu có)
+        if (room.getBills() != null) {
+            room.getBills().clear();
+        }
+
+        // Đặt lại trạng thái phòng
         room.setRentStatus("available");
         roomRepository.save(room);
         return new ResponseEntity<>(Collections.singletonMap("message", "Xoa phong thanh cong"), HttpStatus.OK);

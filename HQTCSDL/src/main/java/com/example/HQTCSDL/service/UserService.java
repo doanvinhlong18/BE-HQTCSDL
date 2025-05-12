@@ -8,7 +8,7 @@ public interface UserService {
     ResponseEntity<?> login(LoginDto loginDto);
     ResponseEntity<?> logout();
     ResponseEntity<?> register(UserDto userDto);
-
+    ResponseEntity<?> changePassword(UserDto userDto);
     ResponseEntity<?> addUser(UserDto userDto);
 
     ResponseEntity<?> updateUserById(int id, UserDto userDto);

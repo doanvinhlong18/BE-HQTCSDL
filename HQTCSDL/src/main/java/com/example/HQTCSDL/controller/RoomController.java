@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public interface RoomController {
     @PutMapping("/edit/{idRoom}")
     ResponseEntity<?> editRoom(@PathVariable int idRoom,@RequestBody RoomEntity roomEntity);
-    @DeleteMapping("/remove/{idRoom}")
+    @PutMapping("/remove/{idRoom}")
     ResponseEntity<?> deleteAllResidentsFromRoom(@PathVariable int idRoom);
     @PutMapping("/break/{idResident}")
     ResponseEntity<?> deleteResidentFromRoom(@PathVariable int idResident);

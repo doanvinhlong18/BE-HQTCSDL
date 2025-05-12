@@ -9,4 +9,5 @@ public interface RentalTimeService{
     ResponseEntity<?> updateRentalTime(int idRentalTime, RentalTimeDto rentalTimeDto);
     ResponseEntity<?> getRentalTime(int idRentalTime);
     ResponseEntity<?> getAllRentalTimes();
+    ResponseEntity<?> updateRentalTimeByRoom(int idRoom, RentalTimeDto rentalTimeDto);
 }

@@ -1,6 +1,7 @@
 package com.example.HQTCSDL.serviceImpl;
 
 import com.example.HQTCSDL.Dto.BuildingDto;
+import com.example.HQTCSDL.Dto.ResponseDto.BuildingResponseDto;
 import com.example.HQTCSDL.Entity.BuildingEntity;
 import com.example.HQTCSDL.Entity.RoomEntity;
 import com.example.HQTCSDL.repository.BuildingRepository;
@@ -67,7 +68,14 @@ public class BuildingServiceImpl implements BuildingService {
         if (buildingEntity.isEmpty()){
             return new ResponseEntity<>(Collections.singletonMap("message", "There is nothing to view"), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(buildingEntity.get(), HttpStatus.OK);
+        BuildingResponseDto buildingResponseDto = new BuildingResponseDto();
+        buildingResponseDto.setId(buildingEntity.get().getId());
+        buildingResponseDto.setName(buildingEntity.get().getName());
+        buildingResponseDto.setAddress(buildingEntity.get().getAddress());
+        buildingResponseDto.setStatus(buildingEntity.get().getStatus());
+        buildingResponseDto.setFloorCount(buildingEntity.get().getFloorCount());
+        buildingResponseDto.setTotalRooms(buildingEntity.get().getTotalRooms());
+        return new ResponseEntity<>(buildingResponseDto, HttpStatus.OK);
     }
 
     @Override

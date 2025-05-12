@@ -39,4 +39,9 @@ public class RentalTimeControllerImpl implements RentalTimeController {
     public ResponseEntity<?> getAllRentalTimes() {
         return rentalTimeService.getAllRentalTimes();
     }
+
+    @Override
+    public ResponseEntity<?> updateAllRentalTimes(int idRoom, RentalTimeDto rentalTimeDto) {
+        return rentalTimeService.updateRentalTimeByRoom(idRoom, rentalTimeDto);
+    }
 }

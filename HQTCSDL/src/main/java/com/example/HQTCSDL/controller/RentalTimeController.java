@@ -16,4 +16,6 @@ public interface RentalTimeController {
     ResponseEntity<?> getRentalTime(@PathVariable int idRentalTime);
     @GetMapping("/all")
     ResponseEntity<?> getAllRentalTimes();
+    @PutMapping("/update/all/{idRoom}")
+    ResponseEntity<?> updateAllRentalTimes(@PathVariable int idRoom,@RequestBody RentalTimeDto rentalTimeDto);
 }

@@ -88,6 +88,21 @@ public class RentalTimeServiceImpl implements RentalTimeService {
         return new ResponseEntity<>(rentalTimeEntities, HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<?> updateRentalTimeByRoom(int idRoom, RentalTimeDto rentalTimeDto) {
+        Optional<RoomEntity> roomEntity = roomRepository.findById(idRoom);
+        if(roomEntity.isEmpty()){
+            return new ResponseEntity<>(Collections.singletonMap("message", "Room not found"), HttpStatus.NOT_FOUND);
+        }
+        RoomEntity room = roomEntity.get();
+        for(RentalTimeEntity rentalTime: room.getRentalTimes()){
+            rentalTime.setStartDate(rentalTimeDto.getStartTime());
+            rentalTime.setEndDate(rentalTimeDto.getEndTime());
+            rentalTimeRepository.save(rentalTime);
+        }
+        return new ResponseEntity<>(Collections.singletonMap("message", "Rental time updated"), HttpStatus.OK);
+    }
+
     public RentalTimeEntity getRentalTimeFromDto(RentalTimeDto rentalTimeDto) {
         RentalTimeEntity rentalTimeEntity = new RentalTimeEntity();
         rentalTimeEntity.setEndDate(rentalTimeDto.getEndTime());

@@ -5,19 +5,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter
-public class UserResponseDto {
+public class RentalTimeResponseDto {
     int id;
-    String username;
-    String fullName;
+    @JsonFormat(pattern = "yyy-MM-dd")
+    Date startTime;
     @JsonFormat(pattern = "yyyy-MM-dd")
-    Date dateOfBirth;
-    String phone;
-    String email;
-    String position;
-    String password;
-    List<BuildingResponseDto> buildings;
+    Date endTime;
+    ResidentResponse resident;
 }

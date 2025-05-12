@@ -18,10 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -67,6 +64,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public ResponseEntity<?> changePassword(UserDto userDto) {
+        return null;
+    }
+
+    @Override
     public ResponseEntity<?> addUser(UserDto userDto) {
         try{
             if (validateSignup(userDto)) {
@@ -101,7 +103,8 @@ public class UserServiceImpl implements UserService {
         user.setFullName(userDto.getFullName());
         user.setPhone(userDto.getPhone());
         user.setPosition(userDto.getPosition());
-        return new ResponseEntity<>(userRepository.save(user), HttpStatus.OK);
+        userRepository.save(user);
+        return new ResponseEntity<>(Collections.singletonMap("message", "Cập nhật thành công."), HttpStatus.OK);
     }
 
     @Override
@@ -129,7 +132,11 @@ public class UserServiceImpl implements UserService {
         if (users.isEmpty()){
             return new ResponseEntity<>(Collections.singletonMap("message", "Khong ton tai user nao"), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        List<UserResponseDto> userResponseDtos = new ArrayList<>();
+        for(UserEntity user : users){
+            userResponseDtos.add(getUserResponseDto(user));
+        }
+        return new ResponseEntity<>(userResponseDtos, HttpStatus.OK);
     }
 
     @Override
@@ -147,6 +154,7 @@ public class UserServiceImpl implements UserService {
         userResponseDto.setFullName(user.getFullName());
         userResponseDto.setPhone(user.getPhone());
         userResponseDto.setPosition(user.getPosition());
+        userResponseDto.setPassword(user.getPassword());
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
     }
 
@@ -172,5 +180,16 @@ public class UserServiceImpl implements UserService {
         userEntity.setPhone(userDto.getPhone());
         userEntity.setPosition(userDto.getPosition());
         return userEntity;
+    }
+    public UserResponseDto getUserResponseDto(UserEntity userEntity) {
+        UserResponseDto userResponseDto = new UserResponseDto();
+        userResponseDto.setId(userEntity.getId());
+        userResponseDto.setUsername(userEntity.getUsername());
+        userResponseDto.setEmail(userEntity.getEmail());
+        userResponseDto.setDateOfBirth(userEntity.getDateOfBirth());
+        userResponseDto.setFullName(userEntity.getFullName());
+        userResponseDto.setPhone(userEntity.getPhone());
+        userResponseDto.setPosition(userEntity.getPosition());
+        return userResponseDto;
     }
 }

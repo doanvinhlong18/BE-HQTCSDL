@@ -21,7 +21,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private JwtGenerator tokenGenerator;
     @Autowired
-    private CustomUserDetailsService customUserDetailsService;;
+    private CustomUserDetailsService customUserDetailsService;
 
     public JWTAuthenticationFilter() {
     }
@@ -35,8 +35,9 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(token) && tokenGenerator.validateToken(token)) {
             String username = tokenGenerator.getUsernameFromToken(token);
             List<String> roles = tokenGenerator.getRolesFromToken(token);
-            System.out.println("Roles: " + roles);
-
+            System.out.println("Token: " + token);
+            System.out.println("Username: " + username);
+            System.out.println("Roles from token: " + roles);
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
 
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(

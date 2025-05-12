@@ -16,6 +16,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import static org.springframework.security.authorization.AuthorityAuthorizationManager.hasAuthority;
+import static org.springframework.security.authorization.AuthorizationManagers.anyOf;
 
 @Configuration
 @EnableWebSecurity
@@ -45,21 +47,19 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/user/signup", "/user/login").permitAll()
-                        .requestMatchers(
-                        "/bill/**",
-                        "/service/**",
-                        "/usedservice/**"
-                        ).hasAuthority("ADMIN_FINANCE")
-                        .requestMatchers(
-                        "/room/**",
-                        "/rentaltime/**",
-                        "/resident/**"
-                        ).hasAuthority("ADMIN_BUILDING")
-                        .requestMatchers(
-                        apiAdmin
-                        ).hasAuthority("ADMIN")
-//                                .requestMatchers("/**").permitAll()
+                        .requestMatchers("/user/signup", "/user/login", "/user/add", "/building/*", "/user/get").permitAll()
+
+                        // Cho ADMIN hoặc ADMIN_FINANCE
+                        .requestMatchers("/bill/**", "/service/**", "/usedservice/**")
+                        .access(anyOf(hasAuthority("ROLE_ADMIN"), hasAuthority("ROLE_ADMIN_FINANCE")))
+
+                        // Cho ADMIN hoặc ADMIN_BUILDING
+                        .requestMatchers("/room/**", "/rentaltime/**", "/resident/**")
+                        .access(anyOf(hasAuthority("ROLE_ADMIN"), hasAuthority("ROLE_ADMIN_BUILDING")))
+
+                        // Các route còn lại trong /user/**
+                        .requestMatchers("/user/**").hasAuthority("ROLE_ADMIN")
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
