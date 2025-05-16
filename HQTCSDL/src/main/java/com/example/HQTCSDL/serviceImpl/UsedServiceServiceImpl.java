@@ -44,6 +44,7 @@ public class UsedServiceServiceImpl implements UsedServiceService {
         usedServiceEntity.setEndDateTime(usedServiceDto.getEndDateTime());
         usedServiceEntity.setStartDateTime(usedServiceDto.getStartDateTime());
         usedServiceEntity.setQuantity(usedServiceDto.getQuantity());
+        usedServiceEntity.setStatus(usedServiceDto.getStatus());
         usedServiceEntity.setResident(resident);
         usedServiceEntity.setService(service);
         usedServiceRepository.save(usedServiceEntity);
@@ -63,6 +64,7 @@ public class UsedServiceServiceImpl implements UsedServiceService {
         }
         UsedServiceEntity usedService = usedServiceEntity.get();
         usedService.setStatus(usedServiceDto.getStatus());
+        usedServiceRepository.save(usedService);
         return new ResponseEntity<>(Collections.singletonMap("message", "UsedService updated"), HttpStatus.OK);
     }
 

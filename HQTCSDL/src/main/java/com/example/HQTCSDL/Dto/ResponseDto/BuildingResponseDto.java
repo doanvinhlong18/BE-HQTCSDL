@@ -3,6 +3,8 @@ package com.example.HQTCSDL.Dto.ResponseDto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class BuildingResponseDto {
@@ -12,4 +14,6 @@ public class BuildingResponseDto {
     int floorCount;
     int totalRooms;
     String status;
+    List<RoomResponseDto> rooms;
+    UserResponseDto user;
 }

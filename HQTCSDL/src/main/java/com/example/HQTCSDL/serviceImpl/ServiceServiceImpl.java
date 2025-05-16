@@ -1,5 +1,7 @@
 package com.example.HQTCSDL.serviceImpl;
 
+import com.example.HQTCSDL.Dto.ResponseDto.ServiceResponseDto;
+import com.example.HQTCSDL.EntityToResponse.ServiceETR;
 import com.example.HQTCSDL.Dto.ServiceDto;
 import com.example.HQTCSDL.Entity.ServiceEntity;
 import com.example.HQTCSDL.repository.ServiceRepository;
@@ -8,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -60,7 +63,8 @@ public class ServiceServiceImpl implements ServiceService {
     public ResponseEntity<?> getService(int idService) {
         ServiceEntity serviceEntity = serviceRepository.findById(idService).orElseThrow(()
         -> new RuntimeException("No such service"));
-        return new ResponseEntity<>(serviceEntity, HttpStatus.OK);
+        ServiceResponseDto serviceResponseDto = ServiceETR.getServiceResponseDto(serviceEntity);
+        return new ResponseEntity<>(serviceResponseDto, HttpStatus.OK);
     }
 
     @Override
@@ -69,6 +73,10 @@ public class ServiceServiceImpl implements ServiceService {
         if (serviceEntities.isEmpty()){
             return new ResponseEntity<>(Collections.singletonMap("message", "No service"), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(serviceEntities, HttpStatus.OK);
+        List<ServiceResponseDto> serviceResponseDtos = new ArrayList<>();
+        for(ServiceEntity serviceEntity : serviceEntities){
+            serviceResponseDtos.add(ServiceETR.getServiceResponseDto(serviceEntity));
+        }
+        return new ResponseEntity<>(serviceResponseDtos, HttpStatus.OK);
     }
 }

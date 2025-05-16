@@ -2,8 +2,11 @@ package com.example.HQTCSDL.serviceImpl;
 
 import com.example.HQTCSDL.Dto.BuildingDto;
 import com.example.HQTCSDL.Dto.ResponseDto.BuildingResponseDto;
+import com.example.HQTCSDL.Dto.ResponseDto.RoomResponseDto;
 import com.example.HQTCSDL.Entity.BuildingEntity;
 import com.example.HQTCSDL.Entity.RoomEntity;
+import com.example.HQTCSDL.EntityToResponse.Building;
+import com.example.HQTCSDL.EntityToResponse.Room;
 import com.example.HQTCSDL.repository.BuildingRepository;
 import com.example.HQTCSDL.repository.RoomRepository;
 import com.example.HQTCSDL.service.BuildingService;
@@ -11,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -59,6 +63,7 @@ public class BuildingServiceImpl implements BuildingService {
         buildingEntity1.setStatus(building.getStatus());
         buildingEntity1.setFloorCount(building.getFloorCount());
         buildingEntity1.setTotalRooms(building.getTotalRooms());
+        buildingRepository.save(buildingEntity1);
         return new ResponseEntity<>(Collections.singletonMap("message", "Cap nhat thanh cong"), HttpStatus.OK);
     }
 
@@ -84,7 +89,18 @@ public class BuildingServiceImpl implements BuildingService {
         if (buildingEntities.isEmpty()){
             return new ResponseEntity<>(Collections.singletonMap("message", "There is nothing to view"), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(buildingEntities, HttpStatus.OK);
+        List<BuildingResponseDto> buildingResponseDtos = new ArrayList<>();
+        for(BuildingEntity buildingEntity : buildingEntities){
+            BuildingResponseDto buildingResponseDto = Building.getBuildingResponseDto(buildingEntity);
+            List<RoomResponseDto> roomResponseDtos = new ArrayList<>();
+            for(RoomEntity roomEntity : buildingEntity.getRooms()){
+                RoomResponseDto roomResponseDto = Room.getRoomResponseDto(roomEntity);
+                roomResponseDtos.add(roomResponseDto);
+            }
+            buildingResponseDto.setRooms(roomResponseDtos);
+            buildingResponseDtos.add(buildingResponseDto);
+        }
+        return new ResponseEntity<>(buildingResponseDtos, HttpStatus.OK);
     }
 
     @Override
@@ -114,4 +130,6 @@ public class BuildingServiceImpl implements BuildingService {
         buildingEntity.setFloorCount(buildingDto.getFloorCount());
         return buildingEntity;
     }
+
+
 }

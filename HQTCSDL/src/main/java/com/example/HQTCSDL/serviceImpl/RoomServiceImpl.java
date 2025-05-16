@@ -3,6 +3,8 @@ package com.example.HQTCSDL.serviceImpl;
 import com.example.HQTCSDL.Dto.AddResidentToRoomDto;
 import com.example.HQTCSDL.Dto.RentalTimeDto;
 import com.example.HQTCSDL.Dto.ResidentDto;
+import com.example.HQTCSDL.Dto.ResponseDto.RentalTimeResponseDto;
+import com.example.HQTCSDL.Dto.ResponseDto.RoomResponseDto;
 import com.example.HQTCSDL.Dto.RoomDto;
 import com.example.HQTCSDL.Entity.RentalTimeEntity;
 import com.example.HQTCSDL.Entity.ResidentEntity;
@@ -15,10 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class RoomServiceImpl implements RoomService {
@@ -144,7 +143,17 @@ public class RoomServiceImpl implements RoomService {
         if (roomEntities.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(roomEntities, HttpStatus.OK);
+        List<RoomResponseDto> roomResponseDtoList = new ArrayList<>();
+        for(RoomEntity roomEntity : roomEntities) {
+            RoomResponseDto roomResponseDto = getRoomResponseDto(roomEntity);
+            List<RentalTimeResponseDto> rentalTimeResponseDtoList = new ArrayList<>();
+            for(RentalTimeEntity rentalTimeEntity : roomEntity.getRentalTimes()) {
+                rentalTimeResponseDtoList.add(getRentalTimeResponseDto(rentalTimeEntity));
+            }
+            roomResponseDto.setRentalTimes(rentalTimeResponseDtoList);
+        }
+
+        return new ResponseEntity<>(roomResponseDtoList, HttpStatus.OK);
     }
     public RentalTimeEntity getRentalTimeFromDto(RentalTimeDto rentalTimeDto) {
         RentalTimeEntity rentalTimeEntity = new RentalTimeEntity();
@@ -160,5 +169,23 @@ public class RoomServiceImpl implements RoomService {
         residentEntity.setName(residentDto.getName());
         residentEntity.setDateOfBirth(residentDto.getDateOfBirth());
         return residentEntity;
+    }
+    public RoomResponseDto getRoomResponseDto(RoomEntity roomEntity) {
+        RoomResponseDto roomResponseDto = new RoomResponseDto();
+        roomResponseDto.setId(roomEntity.getId());
+        roomResponseDto.setArea(roomEntity.getArea());
+        roomResponseDto.setRentPrice(roomEntity.getRentPrice());
+        roomResponseDto.setRentStatus(roomEntity.getRentStatus());
+        roomResponseDto.setType(roomEntity.getType());
+        roomResponseDto.setName(roomEntity.getName());
+        return roomResponseDto;
+    }
+    public RentalTimeResponseDto getRentalTimeResponseDto(RentalTimeEntity rentalTimeEntity) {
+        RentalTimeResponseDto rentalTimeResponseDto = new RentalTimeResponseDto();
+        rentalTimeResponseDto.setId(rentalTimeEntity.getId());
+        rentalTimeResponseDto.setStartTime(rentalTimeEntity.getStartDate());
+        rentalTimeResponseDto.setEndTime(rentalTimeEntity.getEndDate());
+        rentalTimeResponseDto.setResident(rentalTimeResponseDto.getResident());
+        return rentalTimeResponseDto;
     }
 }
