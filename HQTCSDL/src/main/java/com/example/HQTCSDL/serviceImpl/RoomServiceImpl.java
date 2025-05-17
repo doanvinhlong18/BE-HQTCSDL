@@ -151,6 +151,7 @@ public class RoomServiceImpl implements RoomService {
                 rentalTimeResponseDtoList.add(getRentalTimeResponseDto(rentalTimeEntity));
             }
             roomResponseDto.setRentalTimes(rentalTimeResponseDtoList);
+            roomResponseDtoList.add(roomResponseDto);
         }
 
         return new ResponseEntity<>(roomResponseDtoList, HttpStatus.OK);

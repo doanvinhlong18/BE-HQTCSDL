@@ -1,9 +1,11 @@
 package com.example.HQTCSDL.serviceImpl;
 
+import com.example.HQTCSDL.Dto.ResponseDto.UsedServiceResponseDto;
 import com.example.HQTCSDL.Dto.UsedServiceDto;
 import com.example.HQTCSDL.Entity.ResidentEntity;
 import com.example.HQTCSDL.Entity.ServiceEntity;
 import com.example.HQTCSDL.Entity.UsedServiceEntity;
+import com.example.HQTCSDL.EntityToResponse.UsedService;
 import com.example.HQTCSDL.repository.ResidentRepository;
 import com.example.HQTCSDL.repository.ServiceRepository;
 import com.example.HQTCSDL.repository.UsedServiceRepository;
@@ -12,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -74,7 +77,7 @@ public class UsedServiceServiceImpl implements UsedServiceService {
         if (usedServiceEntity.isEmpty()) {
             return new ResponseEntity<>(Collections.singletonMap("message", "UsedService not found"), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(usedServiceEntity.get(), HttpStatus.OK);
+        return new ResponseEntity<>(UsedService.getUsedServiceResponseDto(usedServiceEntity.get()), HttpStatus.OK);
     }
 
     @Override
@@ -83,7 +86,11 @@ public class UsedServiceServiceImpl implements UsedServiceService {
         if (usedServiceEntities.isEmpty()) {
             return new ResponseEntity<>(Collections.singletonMap("message", "No usedService"), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(usedServiceEntities, HttpStatus.OK);
+        List<UsedServiceResponseDto> usedServiceResponseDtos = new ArrayList<>();
+        for(UsedServiceEntity usedServiceEntity : usedServiceEntities) {
+            usedServiceResponseDtos.add(UsedService.getUsedServiceResponseDto(usedServiceEntity));
+        }
+        return new ResponseEntity<>(usedServiceResponseDtos, HttpStatus.OK);
     }
 
     @Override
