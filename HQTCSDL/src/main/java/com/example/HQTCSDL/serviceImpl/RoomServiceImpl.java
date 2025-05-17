@@ -9,6 +9,7 @@ import com.example.HQTCSDL.Dto.RoomDto;
 import com.example.HQTCSDL.Entity.RentalTimeEntity;
 import com.example.HQTCSDL.Entity.ResidentEntity;
 import com.example.HQTCSDL.Entity.RoomEntity;
+import com.example.HQTCSDL.EntityToResponse.Resident;
 import com.example.HQTCSDL.repository.RentalTimeRepository;
 import com.example.HQTCSDL.repository.ResidentRepository;
 import com.example.HQTCSDL.repository.RoomRepository;
@@ -148,7 +149,9 @@ public class RoomServiceImpl implements RoomService {
             RoomResponseDto roomResponseDto = getRoomResponseDto(roomEntity);
             List<RentalTimeResponseDto> rentalTimeResponseDtoList = new ArrayList<>();
             for(RentalTimeEntity rentalTimeEntity : roomEntity.getRentalTimes()) {
-                rentalTimeResponseDtoList.add(getRentalTimeResponseDto(rentalTimeEntity));
+                RentalTimeResponseDto rentalTimeResponseDto = getRentalTimeResponseDto(rentalTimeEntity);
+                rentalTimeResponseDto.setResident(Resident.getResidentResponse(rentalTimeEntity.getResident()));
+                rentalTimeResponseDtoList.add(rentalTimeResponseDto);
             }
             roomResponseDto.setRentalTimes(rentalTimeResponseDtoList);
             roomResponseDtoList.add(roomResponseDto);

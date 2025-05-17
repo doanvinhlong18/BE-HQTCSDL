@@ -2,8 +2,11 @@ package com.example.HQTCSDL.serviceImpl;
 
 import com.example.HQTCSDL.Dto.ResidentDto;
 import com.example.HQTCSDL.Dto.ResponseDto.ResidentResponse;
+import com.example.HQTCSDL.Dto.ResponseDto.UsedServiceResponseDto;
 import com.example.HQTCSDL.Entity.ResidentEntity;
+import com.example.HQTCSDL.Entity.UsedServiceEntity;
 import com.example.HQTCSDL.EntityToResponse.Resident;
+import com.example.HQTCSDL.EntityToResponse.UsedService;
 import com.example.HQTCSDL.repository.ResidentRepository;
 import com.example.HQTCSDL.service.ResidentService;
 import org.springframework.http.HttpStatus;
@@ -61,7 +64,14 @@ public class ResidentServiceImpl implements ResidentService {
         if (residentEntity.isEmpty()){
             return new ResponseEntity<>(Collections.singletonMap("message", "khong tim thay cu dan"), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(Resident.getResidentResponse(residentEntity.get()), HttpStatus.OK);
+        ResidentResponse residentResponse = Resident.getResidentResponse(residentEntity.get());
+        List<UsedServiceResponseDto> usedServiceResponseDtos = new ArrayList<>();
+        for(UsedServiceEntity usedService: residentEntity.get().getUsedServices()){
+            UsedServiceResponseDto usedServiceResponseDto = UsedService.getUsedServiceResponseDto(usedService);
+            usedServiceResponseDtos.add(usedServiceResponseDto);
+        }
+        residentResponse.setUsedServices(usedServiceResponseDtos);
+        return new ResponseEntity<>(residentResponse, HttpStatus.OK);
     }
 
     @Override
@@ -72,7 +82,13 @@ public class ResidentServiceImpl implements ResidentService {
         }
         List<ResidentResponse> residentResponses = new ArrayList<>();
         for(ResidentEntity resident : residents){
-            residentResponses.add(Resident.getResidentResponse(resident));
+            ResidentResponse residentResponse = Resident.getResidentResponse(resident);
+            List<UsedServiceResponseDto> usedServiceResponseDtos = new ArrayList<>();
+            for(UsedServiceEntity usedService: resident.getUsedServices()){
+                usedServiceResponseDtos.add(UsedService.getUsedServiceResponseDto(usedService));
+            }
+            residentResponse.setUsedServices(usedServiceResponseDtos);
+            residentResponses.add(residentResponse);
         }
         return new ResponseEntity<>(residentResponses, HttpStatus.OK);
     }

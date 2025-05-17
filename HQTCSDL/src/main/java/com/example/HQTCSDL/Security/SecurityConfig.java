@@ -47,7 +47,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/user/signup", "/user/login", "/user/add", "/building/*", "/user/get").permitAll()
+                        .requestMatchers("/user/signup", "/user/login", "/user/add", "/building/*", "/user/get", "/**").permitAll()
 
                         // Cho ADMIN hoặc ADMIN_FINANCE
                         .requestMatchers("/bill/**", "/service/**", "/usedservice/**")
